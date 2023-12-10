@@ -33,9 +33,4 @@ public class SnakeBody : MonoBehaviour
         bp.transform.position = priorBp.transform.position + dist;
 
     }
-
-    private void Update()
-    {
-        Debug.Log(Vector3.Distance(head.transform.position, bodyParts[0].transform.position));
-    }
 }

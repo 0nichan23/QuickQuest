@@ -36,12 +36,12 @@ public class SnakeMovement : MonoBehaviour
 
         if (nextTurningPoints.Count > 0 && ReferenceEquals(nextTurningPoint, null))
         {
-            Debug.Log("recieved point");
+            //Debug.Log("recieved point");
             nextTurningPoint = nextTurningPoints.Dequeue();
         }
         if (!ReferenceEquals(nextTurningPoint, null) && CheckTurningPoint())
         {
-            Debug.Log("reached point");
+            //Debug.Log("reached point");
             ChangeDir(nextTurningPoint.Dir);
             transform.position = nextTurningPoint.Pos;
             OnPointReached?.Invoke(moveDir, transform.position, this, priorBodyPart);
