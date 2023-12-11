@@ -241,13 +241,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 268502861}
-  bodyParts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  bodyParts: []
   distanceOfParts: 1.55
   bodyPartPrefab: {fileID: 1267821323969423671, guid: edf60991105cc684bb5d72880eaab2eb, type: 3}
+  teamSize: 3
 --- !u!4 &235495748
 Transform:
   m_ObjectHideFlags: 0
