@@ -20,12 +20,16 @@ public class SnakeMovement : MonoBehaviour
     public bool input;
 
     public SnakeMovement PriorBodyPart { get => priorBodyPart; }
+    public Vector2Int MoveDir { get => moveDir; }
+    public Queue<TurningPoint> NextTurningPoints { get => nextTurningPoints; }
+    public float MovementSpeed { get => movementSpeed; set => movementSpeed = value; }
 
-    private void Start()
+    private void Awake()
     {
         lastInput = -inputCD;
         moveDir = new Vector2Int(0, 1);//move upwards by default
     }
+
 
     private void Update()
     {
@@ -50,6 +54,11 @@ public class SnakeMovement : MonoBehaviour
 
         rb.velocity = new Vector2(moveDir.x, moveDir.y) * movementSpeed;
 
+    }
+
+    public void CopyTurningPoints(Queue<TurningPoint> givenPoints)
+    {
+        nextTurningPoints = new Queue<TurningPoint>(givenPoints);
     }
 
     public void CacheTurningPoint(Vector2Int dir, Vector3 pos)

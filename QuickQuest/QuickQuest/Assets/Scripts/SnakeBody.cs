@@ -1,30 +1,64 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class SnakeBody : MonoBehaviour
 {
     [SerializeField] private SnakeMovement head;
-    [SerializeField] private SnakeMovement[] bodyParts;
+    [SerializeField] private List<SnakeMovement> bodyParts = new List<SnakeMovement>();
     [SerializeField] private float distanceOfParts;
-
+    [SerializeField] private SnakeMovement bodyPartPrefab;
+    [SerializeField] private int teamSize;
     private void Start()
     {
-        if (bodyParts.Length > 0)
+        for (int i = 0; i < teamSize; i++)
         {
+            CreateBodyPart();
+        }
+        InitializeSnake();
+    }
+
+    private void CreateBodyPart()
+    {
+
+        bodyParts.Add(Instantiate(bodyPartPrefab, transform));
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RemoveBP();
+        }
+    }
+
+    private void InitializeSnake()
+    {
+        if (bodyParts.Count > 0)
+        {
+            head.OnDirChanged.RemoveAllListeners();
+            foreach (var item in bodyParts)
+            {
+                item.OnPointReached.RemoveAllListeners();
+            }
+
+
             bodyParts[0].CachePriorBodyPart(head);
             head.OnDirChanged.AddListener(bodyParts[0].CacheTurningPoint);
             bodyParts[0].OnPointReached.AddListener(ClampDistances);
-            for (int i = 1; i < bodyParts.Length; i++)
+            ClampDistances(bodyParts[0].MoveDir, bodyParts[0].transform.position, bodyParts[0], head);
+
+            for (int i = 1; i < bodyParts.Count; i++)
             {
                 bodyParts[i].CachePriorBodyPart(bodyParts[i - 1]);
                 head.OnDirChanged.AddListener(bodyParts[i].CacheTurningPoint);
                 bodyParts[i].OnPointReached.AddListener(ClampDistances);
+                ClampDistances(bodyParts[i].MoveDir, bodyParts[i].transform.position, bodyParts[i], bodyParts[i - 1]);
             }
         }
-    }
 
+    }
 
     private void ClampDistances(Vector2Int dir, Vector3 pos, SnakeMovement bp, SnakeMovement priorBp)//this tile, tile before
     {
@@ -33,4 +67,16 @@ public class SnakeBody : MonoBehaviour
         bp.transform.position = priorBp.transform.position + dist;
 
     }
+
+    [ContextMenu("remove bp")]
+    public void RemoveBP()
+    {
+        //testing - works for now, will add logic behind unit deaths later obv
+        bodyParts[0].gameObject.SetActive(false);
+        bodyParts.RemoveAt(0);
+        InitializeSnake();
+    }
+
+
+
 }
