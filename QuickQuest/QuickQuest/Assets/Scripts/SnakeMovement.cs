@@ -109,7 +109,6 @@ public class SnakeMovement : MonoBehaviour
         {
             ChangeDir(new Vector2Int(0, 1));
             lastInput = Time.time;
-
         }
         else if (Input.GetKeyDown(KeyCode.S) && moveDir.y != 1)
         {

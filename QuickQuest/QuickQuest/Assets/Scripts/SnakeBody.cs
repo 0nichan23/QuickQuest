@@ -1,11 +1,14 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
+using Unity.VisualScripting;
+using static UnityEditor.Progress;
 
 public class SnakeBody : MonoBehaviour
 {
     [SerializeField] private SnakeMovement head;
-    [SerializeField] private List<SnakeMovement> bodyParts = new List<SnakeMovement>();
+    private List<SnakeMovement> bodyParts = new List<SnakeMovement>();
     [SerializeField] private float distanceOfParts;
     [SerializeField] private SnakeMovement bodyPartPrefab;
     [SerializeField] private int teamSize;
@@ -20,7 +23,6 @@ public class SnakeBody : MonoBehaviour
 
     private void CreateBodyPart()
     {
-
         bodyParts.Add(Instantiate(bodyPartPrefab, transform));
     }
 
@@ -33,7 +35,7 @@ public class SnakeBody : MonoBehaviour
         }
     }
 
-    private void InitializeSnake()
+    private void InitializeSnake(bool clamp = true)
     {
         if (bodyParts.Count > 0)
         {
@@ -47,18 +49,31 @@ public class SnakeBody : MonoBehaviour
             bodyParts[0].CachePriorBodyPart(head);
             head.OnDirChanged.AddListener(bodyParts[0].CacheTurningPoint);
             bodyParts[0].OnPointReached.AddListener(ClampDistances);
-            ClampDistances(bodyParts[0].MoveDir, bodyParts[0].transform.position, bodyParts[0], head);
 
             for (int i = 1; i < bodyParts.Count; i++)
             {
                 bodyParts[i].CachePriorBodyPart(bodyParts[i - 1]);
                 head.OnDirChanged.AddListener(bodyParts[i].CacheTurningPoint);
                 bodyParts[i].OnPointReached.AddListener(ClampDistances);
-                ClampDistances(bodyParts[i].MoveDir, bodyParts[i].transform.position, bodyParts[i], bodyParts[i - 1]);
+            }
+            if (clamp)
+            {
+                ClampAllDistances();
             }
         }
 
     }
+
+    private void ClampAllDistances()
+    {
+        ClampDistances(bodyParts[0].MoveDir, bodyParts[0].transform.position, bodyParts[0], head);
+        for (int i = 1; i < bodyParts.Count; i++)
+        {
+            
+            ClampDistances(bodyParts[i].MoveDir, bodyParts[i].transform.position, bodyParts[i], bodyParts[i - 1]);
+        }
+    }
+
 
     private void ClampDistances(Vector2Int dir, Vector3 pos, SnakeMovement bp, SnakeMovement priorBp)//this tile, tile before
     {
@@ -74,9 +89,16 @@ public class SnakeBody : MonoBehaviour
         //testing - works for now, will add logic behind unit deaths later obv
         bodyParts[0].gameObject.SetActive(false);
         bodyParts.RemoveAt(0);
-        InitializeSnake();
+        InitializeSnake(false);
+        for (int i = 0; i < bodyParts.Count; i++)
+        {
+            if (bodyParts[i].MoveDir == head.MoveDir && bodyParts[i].MoveDir == bodyParts[i].PriorBodyPart.MoveDir)
+            {
+                ClampDistances(bodyParts[i].MoveDir, bodyParts[i].transform.position, bodyParts[i], bodyParts[i].PriorBodyPart);
+            }
+        }
     }
 
 
-
+    
 }
