@@ -86,19 +86,24 @@ public class SnakeBody : MonoBehaviour
     [ContextMenu("remove bp")]
     public void RemoveBP()
     {
-        //testing - works for now, will add logic behind unit deaths later obv
-        bodyParts[0].gameObject.SetActive(false);
-        bodyParts.RemoveAt(0);
+        int index = Random.Range(0, bodyParts.Count);
+        bodyParts[index].gameObject.SetActive(false);
+        bodyParts.RemoveAt(index);
         InitializeSnake(false);
-        for (int i = 0; i < bodyParts.Count; i++)
+        for (int i = index; i < bodyParts.Count; i++)
         {
-            if (bodyParts[i].MoveDir == head.MoveDir && bodyParts[i].MoveDir == bodyParts[i].PriorBodyPart.MoveDir)
+            //if its a straight line essentialy
+            if (bodyParts[i].transform.position.x == bodyParts[i].PriorBodyPart.transform.position.x || bodyParts[i].transform.position.y == bodyParts[i].PriorBodyPart.transform.position.y)
             {
+                Debug.Log($"clamping distance between body parts");
                 ClampDistances(bodyParts[i].MoveDir, bodyParts[i].transform.position, bodyParts[i], bodyParts[i].PriorBodyPart);
+            }
+            else
+            {
+                break;
             }
         }
     }
 
 
-    
 }

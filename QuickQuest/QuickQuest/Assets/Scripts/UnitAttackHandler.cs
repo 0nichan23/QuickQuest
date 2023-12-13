@@ -80,7 +80,6 @@ public class UnitAttackHandler : MonoBehaviour
         }
         target.Damageable.GetHit(new DamageHandler(owner.UnitData.BaseDamage), owner.Dealer); 
         lastAttacked = Time.time;
-
     }
 
 }

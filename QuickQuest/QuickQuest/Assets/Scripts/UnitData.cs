@@ -17,6 +17,7 @@ public class UnitData : ScriptableObject
     [SerializeField] private float range;
     [SerializeField] private int hp;
     [SerializeField] private float cd;
+    [SerializeField] private float def;
 
     //list of status effects to inflict on hit, each with its respective chance
 
@@ -26,4 +27,5 @@ public class UnitData : ScriptableObject
     public float Range { get => range; }
     public int Hp { get => hp; }
     public float Cd { get => cd; }
+    public float Def { get => def; }
 }

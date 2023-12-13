@@ -241,9 +241,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   head: {fileID: 268502861}
-  distanceOfParts: 1.55
+  distanceOfParts: 1.8
   bodyPartPrefab: {fileID: 1267821323969423671, guid: edf60991105cc684bb5d72880eaab2eb, type: 3}
-  teamSize: 15
+  teamSize: 8
 --- !u!4 &235495748
 Transform:
   m_ObjectHideFlags: 0
@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa695272b1eb7a34bb051ee13238e325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7.5
+  movementSpeed: 7
   rb: {fileID: 268502864}
   OnDirChanged:
     m_PersistentCalls:

@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa695272b1eb7a34bb051ee13238e325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7.5
+  movementSpeed: 7
   rb: {fileID: 1770974487560527532}
   OnDirChanged:
     m_PersistentCalls:
